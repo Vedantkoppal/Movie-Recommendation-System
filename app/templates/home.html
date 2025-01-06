@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="bg-gray-900 min-h-screen text-white">
+    <div class="container mx-auto py-4"> <!-- Added py-4 to manage vertical spacing -->
+        <h1 class="text-xl font-bold text-left text-red-500 mb-4">Top Movies of All Time</h1> <!-- Adjusted margin bottom -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {% for movie in movies %}
+          <div class="bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
+            <h2 class="text-lg font-semibold text-white">{{ movie.moviename }}</h2>
+          </div>
+          {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
