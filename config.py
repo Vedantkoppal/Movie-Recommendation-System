@@ -12,5 +12,3 @@ class Config (object):
 
     # prediction config
     INDEX_FILE = os.path.join
-
-    print(SQLALCHEMY_DATABASE_URI )
