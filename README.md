@@ -18,16 +18,3 @@ This movie recommendation system uses advanced similarity search and machine lea
 - **Deployment**: Docker, Render
 
 ---
-
-## 📸 Screenshots
-
-Add screenshots to showcase the application. Suggested screenshots:
-
-1. Home page with the search bar.
-2. Movie selection dropdown with autocomplete.
-3. Recommendation page with movie posters and details.
-
-To add screenshots, upload them to a folder named `screenshots/` in your project and embed like this:
-
-```markdown
-![Home Page](screenshots/home.png)  
