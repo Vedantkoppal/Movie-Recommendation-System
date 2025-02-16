@@ -1,17 +1,25 @@
-from flask import render_template,jsonify,request
 from app import app
-from app.models import Movie,MovieMain
+from flask import render_template,jsonify,request
+from app.models import Movie,TopMovie
 from app.recommend import recommedfinal
+from app import cache
+import requests
 
-def data():
-    lm = ['Interstellar','Shaswshank','Toy Story','Fight Club']
-    return lm
+
+@cache.memoize(86400)
+def movie_api(title):
+    params = {"apikey": app.config["OMDB_API_KEY"], "t": title}
+    try:
+        response = requests.get(app.config["OMDB_URL"], params=params)
+    except:
+        response = jsonify({'title':title})
+    return response.json()
 
 @app.route('/')
 def home():
-    # movies = data()
-    movies = Movie.query.limit(30).all()
-    return render_template('home.html',movies = movies)
+    movie_titles = TopMovie.query.with_entities(TopMovie.title).all()
+    movie_metadata = [title for title in movie_titles]
+    return render_template('home.html',movies = movie_metadata)
 
 @app.route('/index')
 def index():
@@ -22,13 +30,38 @@ def index():
 def search():
     return render_template('recommend.html') 
 
+# @app.route('/search', methods=['GET'])
+# def search_movies():
+#     query = request.args.get('q', '')
+#     if query:
+#         start_matches = Movie.query.filter(Movie.title.ilike(f"{query}%")).limit(10).all()
+#         return jsonify([{'id': movie.id, 'name': movie.title} for movie in movies])
+#     return jsonify([])
+
 @app.route('/search', methods=['GET'])
 def search_movies():
-    query = request.args.get('q', '')
-    if query:
-        movies = MovieMain.query.filter(MovieMain.title.ilike(f"%{query}%")).limit(5).all()
-        return jsonify([{'id': movie.id, 'name': movie.title} for movie in movies])
-    return jsonify([])
+    query = request.args.get('q', '').strip()
+    if not query:
+        return jsonify([])
+
+    # Movies that start with the query first
+    start_matches = Movie.query.filter(Movie.title.ilike(f"{query}%")).limit(10).all()
+    remaining_limit = 10 - len(start_matches)
+
+    # If we still need more results, fetch similar matches (excluding already fetched)
+    similar_matches = []
+    if remaining_limit > 0:
+        similar_matches = (
+            Movie.query.filter(Movie.title.ilike(f"%{query}%"))
+            .filter(~Movie.id.in_([m.id for m in start_matches]))  # Exclude already fetched movies
+            .limit(remaining_limit)
+            .all()
+        )
+
+    # Combine results (movies that start with query appear first)
+    movies = start_matches + similar_matches
+    print(movies[0].title)
+    return jsonify([{'id': movie.id, 'title': movie.title} for movie in movies]) 
 
 @app.route('/get-similar-movies', methods=['POST'])
 def get_similar_movies():
@@ -41,7 +74,7 @@ def get_similar_movies():
     # print("type of ids :",type(similar_movie_ids))
 
     # print("suggested :",similar_movie_ids)
-    similar_movies = MovieMain.query.filter(MovieMain.id.in_(similar_movie_ids)).all()
+    similar_movies = Movie.query.filter(Movie.id.in_(similar_movie_ids)).all()
     # print(similar_movies)
     similar_movies_data = [
         {"id": movie.id, "title": movie.title} 

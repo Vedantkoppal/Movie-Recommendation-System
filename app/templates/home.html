@@ -2,16 +2,32 @@
 {% block content %}
 
 <div class="bg-gray-900 min-h-screen text-white">
-    <div class="container mx-auto py-4"> <!-- Added py-4 to manage vertical spacing -->
-        <h1 class="text-xl font-bold text-left text-red-500 mb-4">Top Movies of All Time</h1> <!-- Adjusted margin bottom -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {% for movie in movies %}
-          <div class="bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
-            <h2 class="text-lg font-semibold text-white">{{ movie.moviename }}</h2>
-          </div>
-          {% endfor %}
+    <div class="container mx-auto py-4"> 
+<h1 class="text-xl font-bold text-left text-red-500 mb-4">Top Movies of All Time</h1> 
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0 mx-auto px-6 sm:px-6 lg:px-12">
+
+    {% for movie in movies %}
+<div class="relative w-[300px] flex flex-col items-center">
+    <!-- Poster Image -->
+    <div class="relative w-full h-[450px] overflow-hidden">
+        <img src="{{ movie.Poster }}" alt="{{ movie.Title }}" class="w-full h-full object-contain block">
+        
+        <!-- Plot (Hidden by Default, Appears on Hover) -->
+        <div class="absolute inset-0 bg-black bg-opacity-80 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 p-4">
+            <p class="text-sm text-center">{{ movie.Plot }}</p>
         </div>
     </div>
+
+    <!-- Movie Title (Classic Font, Centered) -->
+    <h2 class="text-lg font-semibold text-white mt-2 text-center w-full whitespace-normal break-words" style="font-family: 'Marce', sans-serif;">
+        {{ movie.Title }}
+    </h2>
+</div>
+</div>
+
+{% endfor %}
+</div>
 </div>
 
 {% endblock %}

@@ -2,14 +2,12 @@ from app import db
 
 class Movie(db.Model):
     id = db.Column(db.Integer,primary_key = True)
-    moviename = db.Column(db.String(70),unique = True)
-    rating = db.Column(db.Float)
+    title = db.Column(db.String(70))
     def __repr__(self):
-        return '<Movie: {}>'.format(self.moviename)
+        return '<Movie: {}>'.format(self.title)
 
-class MovieMain(db.Model):
+class TopMovie(db.Model):
     id = db.Column(db.Integer,primary_key = True)
-    title = db.Column(db.String(75),unique = False)
-    year = db.Column(db.Integer,unique = False)
+    title = db.Column(db.String(75))
     def __repr__(self):
         return '<Movie: {}>'.format(self.title)

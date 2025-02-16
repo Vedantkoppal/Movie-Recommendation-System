@@ -14,27 +14,38 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Show suggestions only if there is input
-    searchInput.addEventListener('input', async () => {
-        const query = searchInput.value;
+    let debounceTimer;
 
-        if (query) {
-            let suggestionBox = document.getElementById('suggestion-box');
-            if (!suggestionBox) {
-                suggestionBox = createSuggestionBox(); // Create suggestion box if not already present
-            }
-            suggestionBox.style.display = 'block'; // Show the suggestion box
-
+    searchInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer); // Clear the previous timer
+    
+        const query = searchInput.value.trim();
+        if (!query) {
+            hideSuggestions(); // Hide suggestions when input is empty
+            return;
+        }
+    
+        let suggestionBox = document.getElementById('suggestion-box');
+        if (!suggestionBox) {
+            suggestionBox = createSuggestionBox();
+        }
+        suggestionBox.style.display = 'block';
+    
+        // Delay request by 1 second (1000 ms)
+        debounceTimer = setTimeout(async () => {
             const response = await fetch(`/search?q=${query}`);
             const suggestions = await response.json();
             showSuggestions(suggestions);
-        } else {
-            // Hide suggestion box if input is empty
-            const suggestionBox = document.getElementById('suggestion-box');
-            if (suggestionBox) {
-                suggestionBox.style.display = 'none'; // Hide the suggestion box
-            }
-        }
+        }, 1000);
     });
+    
+    function hideSuggestions() {
+        const suggestionBox = document.getElementById('suggestion-box');
+        if (suggestionBox) {
+            suggestionBox.style.display = 'none';
+        }
+    }
+    
 
     // Function to display suggestions
     const showSuggestions = (suggestions) => {
@@ -43,14 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         suggestions.forEach(movie => {
             const suggestionItem = document.createElement("div");
-            suggestionItem.textContent = movie.name;
+            suggestionItem.textContent = movie.title;
             suggestionItem.classList.add("p-2", "cursor-pointer");
 
             suggestionItem.addEventListener('click', () => {
                 selectMovie(movie);
             });
             suggestionBox.appendChild(suggestionItem);
-        });
+        }); 
     };
 
     // Function to select a movie
@@ -59,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedMovies.push(movie);
         // Update selected list in the UI
         const listItem = document.createElement('li');
-        listItem.textContent = movie.name;
+        listItem.textContent = movie.title;
         listItem.classList.add('bg-teal-100', 'p-2', 'rounded', 'text-teal-700', 'text-sm');  // Tailwind styling
         selectedList.appendChild(listItem);
 
