@@ -13,9 +13,15 @@
 <body>
   <header class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 flex items-center justify-between flex-wrap">
     <!-- Site Name -->
-    <a href="/" class="text-2xl font-bold text-purple-400 hover:text-purple-500 transition-colors duration-300">
-      Recommend Me
-    </a>
+    <div class="flex items-center space-x-3">
+      <!-- Logo -->
+      <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Logo" class="w-10 h-10 rounded-full">
+      
+      <!-- Site Name -->
+      <a href="/" class="text-2xl font-bold text-purple-400 hover:text-purple-500 transition-colors duration-300">
+          Recommend Me
+      </a>
+  </div>
   
     <!-- Mobile Menu Button (Hidden on large screens) -->
     <button id="menu-toggle" class="sm:hidden text-purple-400 hover:text-purple-500 focus:outline-none">
@@ -35,7 +41,7 @@
       </a>
   
       <!-- GitHub Link -->
-      <a href="https://github.com/Vedantkoppal/Movie-Recommender-System" class="text-xl font-bold text-purple-400 hover:text-purple-500 transition-colors duration-300">
+      <a href="https://github.com/Vedantkoppal/Movie-Recommendation-System" class="text-xl font-bold text-purple-400 hover:text-purple-500 transition-colors duration-300">
         GitHub
       </a>
     </div>

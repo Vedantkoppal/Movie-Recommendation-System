@@ -6,21 +6,42 @@ from app import cache
 import requests
 
 
-@cache.memoize(86400)
+@cache.memoize(86400)  # Cache for 1 day
 def movie_api(title):
     print(f"Fetching from API: {title}")
+    
     params = {"apikey": app.config["OMDB_API_KEY"], "t": title}
     try:
         response = requests.get(app.config["OMDB_URL"], params=params)
+        response.raise_for_status()  # Raise an error for 4xx/5xx responses
+        data = response.json()
     except:
-        response = jsonify({'title':title})
-    return response.json()
+        data = {"Title": title, "Plot": "Not Available", "Poster": ""}  # Default response
+    
+    return data  # Only return a serializable dict (not a Response object)
+
+
+# @app.route('/')
+# def home():
+#     movie_titles = TopMovie.query.paginate(page = 1,per_page = 10).with_entities(TopMovie.title).limit(5).all()
+#     movie_metadata = [movie_api(title) for title in movie_titles]
+#     return render_template('home.html',movies = movie_metadata)
 
 @app.route('/')
-def home():
-    movie_titles = TopMovie.query.with_entities(TopMovie.title).limit(5).all()
-    movie_metadata = [movie_api(title) for title in movie_titles]
-    return render_template('home.html',movies = movie_metadata)
+@app.route('/page/<int:page>')
+def home(page=1):
+    per_page = 16  # Number of movies per page
+    paginated_movies = TopMovie.query.paginate(page=page, per_page=per_page)
+
+    # Fetch metadata for current page's movies
+    movie_metadata = [movie_api(movie.title) for movie in paginated_movies.items]
+
+    return render_template(
+        'home.html', 
+        movies=movie_metadata,
+        pagination=paginated_movies
+    )
+
 
 @app.route('/index')
 def index():

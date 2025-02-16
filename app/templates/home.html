@@ -4,13 +4,13 @@
 
 <div class="bg-gray-900 min-h-screen text-white">
     <div class="container mx-auto py-4"> 
-        <h1 class="text-xl sm:text-2xl font-bold text-center text-red-600 mb-4">
+        <h1 class="text-4xl sm:text-2xl font-bold text-center text-red-600 mb-4">
             Top Movies of All Time
           </h1>
           
 
           <div class="flex justify-center">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mx-auto px-4 sm:px-6 lg:px-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 gap-y-8 mx-auto px-4 sm:px-6 lg:px-12">
                 {% for movie in movies %}
                 <div class="relative w-[250px] sm:w-[260px] md:w-[280px] lg:w-[300px] xl:w-[320px] flex flex-col items-center">
                     <!-- Poster Image Container (Fixed size) -->
@@ -30,6 +30,19 @@
                 {% endfor %}
             </div>
         </div>
+
+        <div class="pagination flex justify-center space-x-2 mt-4">
+            {% if pagination.has_prev %}
+                <a href="{{ url_for('home', page=pagination.prev_num) }}" class="px-2 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-300">Prev</a>
+            {% endif %}
+        
+            <span class="px-2 py-1 text-sm bg-gray-300 rounded text-gray-800">Page {{ pagination.page }} of {{ pagination.pages }}</span>
+        
+            {% if pagination.has_next %}
+                <a href="{{ url_for('home', page=pagination.next_num) }}" class="px-2 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-300">Next</a>
+            {% endif %}
+        </div>
+
         
         
 </div>
