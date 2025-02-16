@@ -8,6 +8,7 @@ import requests
 
 @cache.memoize(86400)
 def movie_api(title):
+    print(f"Fetching from API: {title}")
     params = {"apikey": app.config["OMDB_API_KEY"], "t": title}
     try:
         response = requests.get(app.config["OMDB_URL"], params=params)
@@ -17,13 +18,13 @@ def movie_api(title):
 
 @app.route('/')
 def home():
-    movie_titles = TopMovie.query.with_entities(TopMovie.title).all()
-    movie_metadata = [title for title in movie_titles]
+    movie_titles = TopMovie.query.with_entities(TopMovie.title).limit(5).all()
+    movie_metadata = [movie_api(title) for title in movie_titles]
     return render_template('home.html',movies = movie_metadata)
 
 @app.route('/index')
 def index():
-    return "Hello World"
+    return "Hello Not world"
 
 
 @app.route('/recommend')

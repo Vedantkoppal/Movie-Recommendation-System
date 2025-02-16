@@ -1,32 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
 
+
 <div class="bg-gray-900 min-h-screen text-white">
     <div class="container mx-auto py-4"> 
-<h1 class="text-xl font-bold text-left text-red-500 mb-4">Top Movies of All Time</h1> 
+        <h1 class="text-xl sm:text-2xl font-bold text-center text-red-600 mb-4">
+            Top Movies of All Time
+          </h1>
+          
 
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0 mx-auto px-6 sm:px-6 lg:px-12">
-
-    {% for movie in movies %}
-<div class="relative w-[300px] flex flex-col items-center">
-    <!-- Poster Image -->
-    <div class="relative w-full h-[450px] overflow-hidden">
-        <img src="{{ movie.Poster }}" alt="{{ movie.Title }}" class="w-full h-full object-contain block">
+          <div class="flex justify-center">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mx-auto px-4 sm:px-6 lg:px-12">
+                {% for movie in movies %}
+                <div class="relative w-[250px] sm:w-[260px] md:w-[280px] lg:w-[300px] xl:w-[320px] flex flex-col items-center">
+                    <!-- Poster Image Container (Fixed size) -->
+                    <div class="relative w-full h-[400px] sm:h-[420px] md:h-[440px] lg:h-[460px] xl:h-[480px] overflow-hidden bg-gray-900 flex items-center justify-center">
+                        <img src="{{ movie.Poster }}" alt="{{ movie.Title }}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-80 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 p-4">
+                            <p class="text-base text-center font-bold" style="font-family: 'Special Elite', monospace;">{{ movie.Plot }}</p>
+                        </div>
+                    </div>
         
-        <!-- Plot (Hidden by Default, Appears on Hover) -->
-        <div class="absolute inset-0 bg-black bg-opacity-80 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 p-4">
-            <p class="text-sm text-center">{{ movie.Plot }}</p>
+                    <!-- Movie Title -->
+                    <h2 class="text-2xl sm:text-xl font-extrabold text-white mt-1 text-center w-full break-words text-green-400" style="font-family: 'monospace', sans-serif;">
+                        {{ movie.Title }}
+                    </h2>
+                    
+                </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-
-    <!-- Movie Title (Classic Font, Centered) -->
-    <h2 class="text-lg font-semibold text-white mt-2 text-center w-full whitespace-normal break-words" style="font-family: 'Marce', sans-serif;">
-        {{ movie.Title }}
-    </h2>
-</div>
-</div>
-
-{% endfor %}
+        
+        
 </div>
 </div>
 

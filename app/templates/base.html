@@ -7,34 +7,47 @@
     <title>Document</title>
     <!-- <link rel="stylesheet" href="{{ url_for('static',    filename='css/base.css') }}"> -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    
 </head>
 <body>
-<header class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 flex items-center justify-between">
-  <!-- Site Name -->
-  <a href="/" class="text-2xl font-bold text-purple-400 hover:text-purple-500 transition-colors duration-300">
-    Recommend Me
-  </a>
+  <header class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 flex items-center justify-between flex-wrap">
+    <!-- Site Name -->
+    <a href="/" class="text-2xl font-bold text-purple-400 hover:text-purple-500 transition-colors duration-300">
+      Recommend Me
+    </a>
   
-  <!-- Navigation and Search -->
-  <div class="flex items-center space-x-6">
-    <!-- Recommendation Button -->
-    <div id="recommend-button" class="relative flex items-center space-x-2 text-gray-800">
-      <button class="p-2 h-7 text-white bg-purple-400 rounded hover:bg-purple-500 flex items-center transition-colors duration-300">
+    <!-- Mobile Menu Button (Hidden on large screens) -->
+    <button id="menu-toggle" class="sm:hidden text-purple-400 hover:text-purple-500 focus:outline-none">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
+    </button>
+  
+    <!-- Navigation (Hidden on small screens, shown when menu button is clicked) -->
+    <div id="nav-menu" class="hidden sm:flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-6 w-full sm:w-auto mt-2 sm:mt-0">
+      <!-- Recommendation Button -->
+      <a href="/recommend" class="p-2 h-7 text-white bg-purple-400 rounded hover:bg-purple-500 flex items-center transition-colors duration-300">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <a href="/recommend" class="text-m font-bold text-white ml-2 hover:text-white">Recommendation</a>
-      </button>
+        <span class="font-bold text-white text-xl">Recommendation</span>
+      </a>
+  
+      <!-- GitHub Link -->
+      <a href="https://github.com/Vedantkoppal/Movie-Recommender-System" class="text-xl font-bold text-purple-400 hover:text-purple-500 transition-colors duration-300">
+        GitHub
+      </a>
     </div>
-    <a href="/https://github.com/Vedantkoppal/Movie-Recommender-System" class="text-2xl font-bold text-purple-400 hover:text-purple-500 transition-colors duration-300">Github</a>
-
-    <!-- Links with the sam`e color theme -->
-    <!-- <a href="/api" class="text-m font-bold text-white hover:text-purple-400 transition-colors duration-300">API</a> -->
-    <!-- <a href="/dashboard" class="text-m font-bold text-white hover:text-purple-400 transition-colors duration-300">Dashboard</a> -->
-    <!-- <a href="/contact" class="text-m font-bold text-white hover:text-purple-400 transition-colors duration-300">Contact</a> -->
-  </div>
-</header>
-
+  </header>
+  
+  <!-- JavaScript for Mobile Menu Toggle -->
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', function () {
+      const menu = document.getElementById('nav-menu');
+      menu.classList.toggle('hidden');
+    });
+  </script>
 
 {% block content %}
 

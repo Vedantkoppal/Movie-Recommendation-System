@@ -11,8 +11,9 @@ class Config (object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # OMDB API
-    OMDB_API_KEY = os.environ.get('OMDB_API_KEY') or ""
-    OMDB_URL = os.environ.get('OMDB_URL') or ""
+    OMDB_API_KEY = os.environ.get('OMDB_API_KEY') or "28c6a732"
+    OMDB_URL = os.environ.get('OMDB_URL') or "http://www.omdbapi.com/"
 
     # Caching settings
-    CACHE_TYPE = "simple"
+    CACHE_TYPE = "FileSystemCache"
+    CACHE_DIR = os.path.join(basedir, "cache_dir")
