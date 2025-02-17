@@ -6,39 +6,9 @@ from app import cache
 import requests
 
 
-@cache.memoize(86400)  # Cache for 1 day
-def movie_api(title):
-    print(f"Fetching from API: {title}")
-    
-    params = {"apikey": app.config["OMDB_API_KEY"], "t": title}
-    try:
-        response = requests.get(app.config["OMDB_URL"], params=params)
-        response.raise_for_status()  # Raise an error for 4xx/5xx responses
-        data = response.json()
-    except Exception as e:
-        print(e)
-
-    if(data['Response'] == 'False'):
-        data = {"Title": title, "Plot": "Poster Not Found", "Poster": ""}
-
-    return data  # Only return a serializable dict (not a Response object)
-
-@app.route("/api/movie") # for customizing recommend.html
-def get_movie():
-    title = request.args.get("title")
-    if not title:
-        return jsonify({"error": "Title is required"}), 400
-    
-    movie_data = movie_api(title)  # Calls `movie_api()`
-    return jsonify(movie_data)  # Sends JSON response
-
-
-
-# @app.route('/')
-# def home():
-#     movie_titles = TopMovie.query.paginate(page = 1,per_page = 10).with_entities(TopMovie.title).limit(5).all()
-#     movie_metadata = [movie_api(title) for title in movie_titles]
-#     return render_template('home.html',movies = movie_metadata)
+@app.route('/index')
+def index():
+    return "Hello Not world"
 
 @app.route('/')
 @app.route('/page/<int:page>')
@@ -54,11 +24,6 @@ def home(page=1):
         movies=movie_metadata,
         pagination=paginated_movies
     )
-
-
-@app.route('/index')
-def index():
-    return "Hello Not world"
 
 
 @app.route('/recommend')
@@ -85,27 +50,53 @@ def search_movies():
             .limit(remaining_limit)
             .all()
         )
-
     # Combine results (movies that start with query appear first)
     movies = start_matches + similar_matches
-    print(movies[0].title)
     return jsonify([{'id': movie.id, 'title': movie.title} for movie in movies]) 
+
+
+# OMDB Route
+@app.route("/api/movie") 
+def get_movie():
+    title = request.args.get("title")
+    if not title:
+        return jsonify({"error": "Title is required"}), 400
+    
+    movie_data = movie_api(title)  # Calls `movie_api()`
+    return jsonify(movie_data)  # Sends JSON response
+
+
+# OMDB API Calling Function
+@cache.memoize(86400)  # Cache for 1 day
+def movie_api(title):
+    params = {"apikey": app.config["OMDB_API_KEY"], "t": title}
+    try:
+        response = requests.get(app.config["OMDB_URL"], params=params)
+        response.raise_for_status()  # Raise an error for 4xx/5xx responses
+        data = response.json()
+    except Exception as e:
+        pass
+
+    if(data['Response'] == 'False'):
+        data = {"Title": title, "Plot": "Poster Not Found", "Poster": ""}
+
+    return data  # Only return a serializable dict (not a Response object)
+
 
 @app.route('/get-similar-movies', methods=['POST'])
 def get_similar_movies():
     data = request.get_json()
     
     movie_ids = data.get('movie_ids', [])
-    print("selected ids :",movie_ids) 
+
     # Get similar movies based on the selected movie IDs
     similar_movie_ids = recommend_qdrant(movie_ids)
-    print(similar_movie_ids)
+
     similar_movies = Movie.query.filter(Movie.id.in_(similar_movie_ids)).all()
     # print(similar_movies)
     similar_movies_data = [
         {"id": movie.id, "title": movie.title} 
         for movie in similar_movies
     ]
-    # print(similar_movies_data)
-    # Return the similar movies to the frontend
+
     return jsonify(similar_movies_data)

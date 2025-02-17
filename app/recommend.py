@@ -1,16 +1,4 @@
-# import faiss
-# import numpy as np
-# import os
-
-# basedir = os.path.abspath(os.path.dirname(__file__))
-# index_file_path = os.path.join(basedir,"Data/processed/faiss_index_file.idx")
-
-# index = faiss.read_index(index_file_path)
-
-# using qdrant instead of faiss
-
 from qdrant_client.http import models
-# from app import QDRANT_URL,QDRANT_COLLECTION, QDRANT_KEY
 from app import qdrant,app
 
 def recommend_qdrant(indices_to_reconstruct, qdrant_client = qdrant, collection_name = app.config['QDRANT_COLLECTION_NAME']):
@@ -41,14 +29,6 @@ def recommend_qdrant(indices_to_reconstruct, qdrant_client = qdrant, collection_
 
 
 
-# from qdrant_client import QdrantClient
-
-# qdrant_client = QdrantClient(
-#     url="https://5c4686a7-f60e-445b-81c2-b235697b9d42.europe-west3-0.gcp.cloud.qdrant.io:6333", 
-#     api_key="R0sgiW6pakm1ZnSqy7oWVYEhbzXpT1EUCQ16GoSNVKmjyV-oyLU2XQ",
-# )
-
-# print(qdrant_client.get_collections())
 
 # def recommedfinal(indices_to_reconstruct):
 #     reconstructed_vectors = np.array([index.reconstruct(idx) for idx in indices_to_reconstruct])
@@ -61,5 +41,13 @@ def recommend_qdrant(indices_to_reconstruct, qdrant_client = qdrant, collection_
 #     filtered_indices = [idx for idx in unique_indices.tolist() if idx not in indices_to_reconstruct]
 #     return filtered_indices
     # pass
+# import faiss
+# import numpy as np
+# import os
 
+# basedir = os.path.abspath(os.path.dirname(__file__))
+# index_file_path = os.path.join(basedir,"Data/processed/faiss_index_file.idx")
 
+# index = faiss.read_index(index_file_path)
+
+# using qdrant instead of faiss
