@@ -15,10 +15,23 @@ def movie_api(title):
         response = requests.get(app.config["OMDB_URL"], params=params)
         response.raise_for_status()  # Raise an error for 4xx/5xx responses
         data = response.json()
-    except:
-        data = {"Title": title, "Plot": "Not Available", "Poster": ""}  # Default response
-    
+    except Exception as e:
+        print(e)
+
+    if(data['Response'] == 'False'):
+        data = {"Title": title, "Plot": "Poster Not Found", "Poster": ""}
+
     return data  # Only return a serializable dict (not a Response object)
+
+@app.route("/api/movie") # for customizing recommend.html
+def get_movie():
+    title = request.args.get("title")
+    if not title:
+        return jsonify({"error": "Title is required"}), 400
+    
+    movie_data = movie_api(title)  # Calls `movie_api()`
+    return jsonify(movie_data)  # Sends JSON response
+
 
 
 # @app.route('/')
