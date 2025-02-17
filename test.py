@@ -9,11 +9,11 @@
 
 # jls_extract_var = 'interstellar'
 # print(movie_api(jls_extract_var))
-from app import app
+# from app import app
 # import requests
-from app import cache
+# from app import cache/
 # from app.routes import movie_api
-cache.clear()
+# cache.clear()
 # @cache.memoize(86400)  # Cache for 1 day
 # def movie_api(title):
 #     print(f"Fetching from API: {title}")
@@ -32,3 +32,11 @@ cache.clear()
 #     return data  # Only return a serializable dict (not a Response object)
 # `
 # print(movie_api('/千と千尋の神隠し'))
+
+# from app import qdrant
+
+# print(qdrant.get_collections())
+
+from app.recommend import recommend_qdrant
+
+recommend_qdrant([1])

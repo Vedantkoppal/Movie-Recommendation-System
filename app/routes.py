@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template,jsonify,request
 from app.models import Movie,TopMovie
-from app.recommend import recommedfinal
+from app.recommend import recommend_qdrant
 from app import cache
 import requests
 
@@ -65,13 +65,6 @@ def index():
 def search():
     return render_template('recommend.html') 
 
-# @app.route('/search', methods=['GET'])
-# def search_movies():
-#     query = request.args.get('q', '')
-#     if query:
-#         start_matches = Movie.query.filter(Movie.title.ilike(f"{query}%")).limit(10).all()
-#         return jsonify([{'id': movie.id, 'name': movie.title} for movie in movies])
-#     return jsonify([])
 
 @app.route('/search', methods=['GET'])
 def search_movies():
@@ -103,12 +96,10 @@ def get_similar_movies():
     data = request.get_json()
     
     movie_ids = data.get('movie_ids', [])
-    # print("selected ids :",movie_ids) 
+    print("selected ids :",movie_ids) 
     # Get similar movies based on the selected movie IDs
-    similar_movie_ids = recommedfinal(movie_ids)
-    # print("type of ids :",type(similar_movie_ids))
-
-    # print("suggested :",similar_movie_ids)
+    similar_movie_ids = recommend_qdrant(movie_ids)
+    print(similar_movie_ids)
     similar_movies = Movie.query.filter(Movie.id.in_(similar_movie_ids)).all()
     # print(similar_movies)
     similar_movies_data = [

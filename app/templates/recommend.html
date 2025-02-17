@@ -1,22 +1,24 @@
-
-
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container mx-auto flex flex-col items-center justify-center space-y-4 mt-4">
-  <!-- Instructions -->
-
-  <!-- Search Bar -->
-  <div id="search-bar" class="flex flex-col items-center w-full text-gray-800">
-    <input 
-      id="search-input" 
-      type="text" 
-      placeholder="Search movies..." 
-      class="p-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 w-80"
-    >
+<div class="container mx-auto px-4 mt-10">
+  <!-- Search Bar Section -->
+  <div id="search-bar" class="w-full flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+    <div class="relative w-full max-w-md">
+      <input 
+        id="search-input" 
+        type="text" 
+        placeholder="Enter Your Fav Movie" 
+        class="p-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full"
+      >
+      <!-- Suggestion Box Dropdown (Initially hidden) -->
+      <div id="suggestion-box" class="absolute top-full mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden">
+        <!-- Suggestions will be inserted here dynamically -->
+      </div>
+    </div>
     <button 
       id="get-similar-btn"
-      class="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 flex items-center mt-2"
+      class="p-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600 flex items-center"
     >
       <svg 
         xmlns="http://www.w3.org/2000/svg" 
@@ -28,36 +30,23 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
-      <div class="text-lg font-semibold text-black-700">
-        Get Similar Movies
-      </div>
+      <span class="ml-2 text-lg font-semibold">Get Similar Movies</span>
     </button>
   </div>
 
-  <!-- Suggestion Box (Now below the search bar) -->
-  <div id="suggestion-box" class="w-80 mt-2 hidden bg-white border border-gray-300 rounded"></div>
-
-  <!-- Selected Movies -->
-  <div id="selected-movies" class="mt-4 text-center">
-    <h3 class="text-lg font-semibold text-gray-700 mb-2">Selected Movies:</h3>
-    <ul id="selected-list" class="flex flex-wrap gap-2 text-gray-600">
-      <!-- Selected movies will appear here -->
+  <!-- Selected Movies Section -->
+  <div id="selected-movies" class="w-full text-center mt-6">
+    <ul id="selected-list" class="flex flex-wrap gap-4 justify-center text-gray-600">
+      <!-- Selected movies will be added here -->
     </ul>
   </div>
 
-  <!-- Similar Movies List -->
-<div id="similar-movies" class="mt-6 text-center">
-    <h3 class="text-lg font-semibold text-gray-700 mb-4">Similar Movies:</h3>
-    <div id="similar-list" class="flex flex-wrap gap-4 justify-start mt-4">
-        <!-- Movie items will be dynamically added here -->
+  <!-- Similar Movies Section -->
+  <div id="similar-movies" class="w-full text-center mt-8">
+    <div id="similar-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 justify-items-center">
+      <!-- Similar movie items will be added here -->
     </div>
-</div>
-
-
-<div id="similar-list" class="mt-4">
-    <!-- Similar movies will be displayed here -->
-</div>
-
+  </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/recommend.js') }}" defer></script>
