@@ -37,6 +37,6 @@
 
 # print(qdrant.get_collections())
 
-from app.recommend import recommend_qdrant
+# from app.recommend import recommend_qdrant
 
-recommend_qdrant([1])
+# recommend_qdrant([1])
