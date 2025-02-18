@@ -8,13 +8,13 @@
 ![OMDB API](https://img.shields.io/badge/OMDB%20API-Movie%20Metadata-red?style=for-the-badge)
 ![Render](https://img.shields.io/badge/Render-Deployment-blue?style=for-the-badge)
 
---
+
 
 ## 🌟 Overview
 The **Movie Recommendation System** suggests movies based on a user's favorite selections. It employs **Collaborative Filtering** and **Content-Based Filtering** techniques to provide personalized recommendations. 
 This system integrates data from multiple datasets. To see detailed building of systems see jupyter notebooks provided.
 
---
+
 
 ## 🛠️ Tech Stack
 - **Frontend**: HTML, CSS (**TailwindCSS** for styling)
@@ -28,14 +28,14 @@ This system integrates data from multiple datasets. To see detailed building of 
 - **External APIs**: **OMDB Movie API** (for movie metadata)
 - **Server**: Gunicorn
 
----
+
 
 ## 🚀 Project Flow
 1. **User selects a favorite movie** 🎬
 2. **System retrieves similar movies** based on cosine similarity in qdrant 🔄
 3. **Recommended movies are displayed** along with their metadata 🖥️
 ![Project Flow](assets/Project_Flow.png)
----
+
 
 ## 🎭 Collaborative Filtering
 Collaborative Filtering is based on user interactions with movies. It uses user ratings to find similarities between movies.
@@ -53,7 +53,7 @@ Collaborative Filtering is based on user interactions with movies. It uses user 
 
 ![Collaborative Filtering](assets/collaborative_filtering.png)
 
----
+
 ## 🎮 Content-Based Filtering
 
 Content-Based Filtering focuses on movie attributes rather than user interactions.
@@ -95,7 +95,7 @@ The dataset contains vote count and each rating, so I have calculated one true r
   - \( m \) = Minimum votes required to be considered
 
   This formula prevents movies with very few ratings from getting an unfairly high or low rank by pulling them toward the global average until they receive more votes.
----
+
 ## 🔢 Matrix Factorization
 
 Matrix Factorization is used to **predict missing values** in the user-movie rating matrix, improving recommendations.
@@ -116,7 +116,7 @@ Matrix Factorization is used to **predict missing values** in the user-movie rat
 
 ![Matrix Factorization](assets/matrix_factorization.png)
 
----
+
 
 ## 🎥 Demo
 
@@ -124,13 +124,13 @@ Watch the system in action! 🎬
 
 🔗 **[Live Demo](https://recommend-me.onrender.com)**
 
----
+
 
 ## 📜 License
 
 This project is open-source and available under the **MIT License**.
 
----
+
 
 ## 📧 Contact
 
