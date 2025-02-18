@@ -55,9 +55,9 @@ Collaborative Filtering is based on user interactions with movies. It uses user 
 
 📌 **Example Representation:**
 
-![Collaborative Filtering1](assets/Collaborative_Filtering1.png
+![Collaborative Filtering1](assets/Collaborative_Filtering1.png)
 
-![Collaborative Filtering2](assets/Collaborative_Filtering2.png
+![Collaborative Filtering2](assets/Collaborative_Filtering2.png)
 
 ---
 
