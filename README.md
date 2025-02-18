@@ -55,7 +55,8 @@ Collaborative Filtering is based on user interactions with movies. It uses user 
 
 📌 **Example Representation:**
 
-![Collaborative Filtering](assets/collaborative_filtering.png)
+![Collaborative Filtering](assets/Collaborative_Filtering1.png)
+![Collaborative Filtering](assets/Collaborative_Filtering2.png)
 ---
 
 ## 🎮 Content-Based Filtering
@@ -81,7 +82,8 @@ Content-Based Filtering focuses on movie attributes rather than user interaction
 
 📌 **Example Representation:**
 
-![Content-Based Filtering](assets/content_based_filtering.png)
+![Content-Based Filtering](assets/Content_Based_Cast&Crew.png)
+![Content-Based Filtering](assets/Content_Based_Plot.png)
 
 ### 🌟 Adjusted Rating Calculation
 
@@ -99,6 +101,7 @@ The dataset contains vote count and each rating, so I have calculated one true r
   - \( m \) = Minimum votes required to be considered
 
   This formula prevents movies with very few ratings from getting an unfairly high or low rank by pulling them toward the global average until they receive more votes.
+  ![Ratings](assets/Rated_Movies.png)
 ---
 ## 🔢 Matrix Factorization
 
@@ -118,7 +121,7 @@ Matrix Factorization is used to **predict missing values** in the user-movie rat
 
 📌 **Example Representation:**
 
-![Matrix Factorization](assets/matrix_factorization.png)
+![Matrix Factorization](assets/MatrixFactorization.png)
 
 
 ---
