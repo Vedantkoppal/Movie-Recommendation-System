@@ -11,15 +11,12 @@
 ---
 
 ## 🌟 Overview
-
-The **Movie Recommendation System** suggests movies based on a user's favorite selections. It employs **Collaborative Filtering** and **Content-Based Filtering** techniques to provide personalized recommendations. The live version utilizes **Collaborative Filtering**, while **Content-Based Filtering** is implemented in Jupyter notebooks.
-
-This system integrates data from multiple datasets, processes user-movie interactions, and stores the generated vectors in **Qdrant Vector Database**. Additionally, the **OMDB Movie API** is used to fetch and store movie metadata.
+The **Movie Recommendation System** suggests movies based on a user's favorite selections. It employs **Collaborative Filtering** and **Content-Based Filtering** techniques to provide personalized recommendations. 
+This system integrates data from multiple datasets. To see detailed building of systems see jupyter notebooks provided.
 
 ---
 
 ## 🛠️ Tech Stack
-
 - **Frontend**: HTML, CSS (**TailwindCSS** for styling)
 - **Backend**: Flask
 - **Database**: SQLite
@@ -34,7 +31,6 @@ This system integrates data from multiple datasets, processes user-movie interac
 ---
 
 ## 🚀 Project Flow
-
 1. **User selects a favorite movie** 🎬
 2. **System retrieves similar movies** based on cosine similarity in qdrant 🔄
 3. **Recommended movies are displayed** along with their metadata 🖥️
@@ -42,7 +38,6 @@ This system integrates data from multiple datasets, processes user-movie interac
 ---
 
 ## 🎭 Collaborative Filtering
-
 Collaborative Filtering is based on user interactions with movies. It uses user ratings to find similarities between movies.
 
 ### 🔹 How It Works
