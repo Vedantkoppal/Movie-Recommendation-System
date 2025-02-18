@@ -8,13 +8,13 @@
 ![OMDB API](https://img.shields.io/badge/OMDB%20API-Movie%20Metadata-red?style=for-the-badge)
 ![Render](https://img.shields.io/badge/Render-Deployment-blue?style=for-the-badge)
 
----
+--
 
 ## 🌟 Overview
 The **Movie Recommendation System** suggests movies based on a user's favorite selections. It employs **Collaborative Filtering** and **Content-Based Filtering** techniques to provide personalized recommendations. 
 This system integrates data from multiple datasets. To see detailed building of systems see jupyter notebooks provided.
 
----
+--
 
 ## 🛠️ Tech Stack
 - **Frontend**: HTML, CSS (**TailwindCSS** for styling)
