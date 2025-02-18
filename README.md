@@ -19,8 +19,7 @@ This system integrates data from multiple datasets. To see detailed building of 
 ## 🎥 Demo
 
 Watch the system in action! 🎬
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/jLauoLxS8Uw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Watch the video](https://img.youtube.com/vi/jLauoLxS8Uw/0.jpg)](https://www.youtube.com/watch?v=jLauoLxS8Uw)
 
 
 ---
