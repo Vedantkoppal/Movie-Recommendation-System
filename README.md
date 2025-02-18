@@ -16,10 +16,14 @@ This system integrates data from multiple datasets. To see detailed building of 
 
 
 ---
+## 🎥 Demo
+
+Watch the system in action! 🎬
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jLauoLxS8Uw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
-
-
+---
 
 ## 🛠️ Tech Stack
 - **Frontend**: HTML, CSS (**TailwindCSS** for styling)
@@ -126,12 +130,6 @@ Matrix Factorization is used to **predict missing values** in the user-movie rat
 ![Matrix Factorization](assets/MatrixFactorization.png)
 
 
----
-## 🎥 Demo
-
-Watch the system in action! 🎬
-
-🔗 **[Live Demo](https://recommend-me.onrender.com)**
 
 ---
 
