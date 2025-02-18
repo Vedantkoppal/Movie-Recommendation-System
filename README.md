@@ -39,7 +39,7 @@ This system integrates data from multiple datasets. To see detailed building of 
 1. **User selects a favorite movie** 🎬
 2. **System retrieves similar movies** based on cosine similarity in qdrant 🔄
 3. **Recommended movies are displayed** along with their metadata 🖥️
-![Project Flow](assets/Project_Flow.png)
+![Project Flow](assets/Project_Flow_Diagram.png)
 ---
 
 ## 🎭 Collaborative Filtering
@@ -55,8 +55,10 @@ Collaborative Filtering is based on user interactions with movies. It uses user 
 
 📌 **Example Representation:**
 
-![Collaborative Filtering](assets/Collaborative_Filtering1.png)
-![Collaborative Filtering](assets/Collaborative_Filtering2.png)
+![Collaborative Filtering1](assets/Collaborative_Filtering1.png
+
+![Collaborative Filtering2](assets/Collaborative_Filtering2.png
+
 ---
 
 ## 🎮 Content-Based Filtering
