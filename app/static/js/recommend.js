@@ -211,75 +211,130 @@ document.addEventListener("DOMContentLoaded", () => {
     // };
 
     
-    const displaySimilarMovies = async (movies) => {
-        // Get the container already present in your HTML
-        const similarList = document.getElementById("similar-list");
-        // Clear previous similar movies
-        similarList.innerHTML = "";
+    // const displaySimilarMovies = async (movies) => {
+    //     // Get the container already present in your HTML
+    //     const similarList = document.getElementById("similar-list");
+    //     // Clear previous similar movies
+    //     similarList.innerHTML = "";
         
-        // Apply grid container classes as in your HTML template.
-        // These classes center the grid and add responsive spacing.
+    //     // Apply grid container classes as in your HTML template.
+    //     // These classes center the grid and add responsive spacing.
+    //     similarList.className =
+    //     "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 gap-y-8 mx-auto justify-items-center px-4 sm:px-6 lg:px-12";
+      
+    //     for (const movie of movies) {
+    //       try {
+    //         // Fetch movie details from Flask API
+    //         const response = await fetch(`/api/movie?title=${encodeURIComponent(movie.title)}`);
+    //         const movieData = await response.json();
+      
+    //         // Create individual movie card container.
+    //         // Instead of fixed widths, we use w-full with a max-width so the card scales fluidly.
+    //         const movieDiv = document.createElement("div");
+    //         movieDiv.className =
+    //           "relative w-full max-w-[320px] flex flex-col items-center";
+      
+    //         // Create image container using an aspect ratio.
+    //         // This ensures the height adjusts proportionally to the width.
+    //         const imgContainer = document.createElement("div");
+    //         imgContainer.className =
+    //           "relative w-full aspect-[2/3] overflow-hidden bg-gray-900 flex items-center justify-center";
+      
+    //         // Create the image element.
+    //         const imgElement = document.createElement("img");
+    //         imgElement.src = movieData.Poster || "https://via.placeholder.com/300";
+    //         imgElement.alt = movieData.Title;
+    //         imgElement.className = "w-full h-full object-cover";
+      
+    //         // Create overlay container for the movie plot (hidden by default; appears on hover).
+    //         const overlay = document.createElement("div");
+    //         overlay.className =
+    //           "absolute inset-0 bg-black bg-opacity-80 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 p-4";
+      
+    //         // Create the paragraph element for the movie plot.
+    //         const plotText = document.createElement("p");
+    //         plotText.className = "text-base text-center font-bold";
+    //         plotText.style.fontFamily = "'Special Elite', monospace";
+    //         plotText.textContent = movieData.Plot || "No plot available";
+      
+    //         overlay.appendChild(plotText);
+    //         imgContainer.appendChild(imgElement);
+    //         imgContainer.appendChild(overlay);
+      
+    //         // Create the movie title element.
+    //         const titleElement = document.createElement("h2");
+    //         titleElement.className =
+    //           "text-2xl sm:text-xl font-extrabold text-white mt-1 text-center w-full break-words text-green-400";
+    //         titleElement.style.fontFamily = "'monospace', sans-serif";
+    //         titleElement.textContent = movieData.Title;
+      
+    //         // Assemble the movie card.
+    //         movieDiv.appendChild(imgContainer);
+    //         movieDiv.appendChild(titleElement);
+      
+    //         // Append movie card to the grid container.
+    //         similarList.appendChild(movieDiv);
+    //       } catch (error) {
+    //         console.error("Error fetching movie details:", error);
+    //       }
+    //     }
+    //   };
+      
+
+    //  New funciton 
+    const displaySimilarMovies = async (movies) => {
+        const similarList = document.getElementById("similar-list");
+        similarList.innerHTML = "";
         similarList.className =
-        "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 gap-y-8 mx-auto justify-items-center px-4 sm:px-6 lg:px-12";
-      
-        for (const movie of movies) {
-          try {
-            // Fetch movie details from Flask API
-            const response = await fetch(`/api/movie?title=${encodeURIComponent(movie.title)}`);
-            const movieData = await response.json();
-      
-            // Create individual movie card container.
-            // Instead of fixed widths, we use w-full with a max-width so the card scales fluidly.
-            const movieDiv = document.createElement("div");
-            movieDiv.className =
-              "relative w-full max-w-[320px] flex flex-col items-center";
-      
-            // Create image container using an aspect ratio.
-            // This ensures the height adjusts proportionally to the width.
-            const imgContainer = document.createElement("div");
-            imgContainer.className =
-              "relative w-full aspect-[2/3] overflow-hidden bg-gray-900 flex items-center justify-center";
-      
-            // Create the image element.
-            const imgElement = document.createElement("img");
-            imgElement.src = movieData.Poster || "https://via.placeholder.com/300";
-            imgElement.alt = movieData.Title;
-            imgElement.className = "w-full h-full object-cover";
-      
-            // Create overlay container for the movie plot (hidden by default; appears on hover).
-            const overlay = document.createElement("div");
-            overlay.className =
-              "absolute inset-0 bg-black bg-opacity-80 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 p-4";
-      
-            // Create the paragraph element for the movie plot.
-            const plotText = document.createElement("p");
-            plotText.className = "text-base text-center font-bold";
-            plotText.style.fontFamily = "'Special Elite', monospace";
-            plotText.textContent = movieData.Plot || "No plot available";
-      
-            overlay.appendChild(plotText);
-            imgContainer.appendChild(imgElement);
-            imgContainer.appendChild(overlay);
-      
-            // Create the movie title element.
-            const titleElement = document.createElement("h2");
-            titleElement.className =
-              "text-2xl sm:text-xl font-extrabold text-white mt-1 text-center w-full break-words text-green-400";
-            titleElement.style.fontFamily = "'monospace', sans-serif";
-            titleElement.textContent = movieData.Title;
-      
-            // Assemble the movie card.
-            movieDiv.appendChild(imgContainer);
-            movieDiv.appendChild(titleElement);
-      
-            // Append movie card to the grid container.
-            similarList.appendChild(movieDiv);
-          } catch (error) {
+            "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 gap-y-8 mx-auto justify-items-center px-4 sm:px-6 lg:px-12";
+    
+        // Create an array of promises for all movie fetches
+        const moviePromises = movies.map(movie =>
+            fetch(`/api/movie?title=${encodeURIComponent(movie.title)}`).then(res => res.json())
+        );
+    
+        try {
+            // Wait for all requests to finish in parallel
+            const movieDataArray = await Promise.all(moviePromises);
+    
+            movieDataArray.forEach((movieData) => {
+                const movieDiv = document.createElement("div");
+                movieDiv.className = "relative w-full max-w-[320px] flex flex-col items-center";
+    
+                const imgContainer = document.createElement("div");
+                imgContainer.className = "relative w-full aspect-[2/3] overflow-hidden bg-gray-900 flex items-center justify-center";
+    
+                const imgElement = document.createElement("img");
+                imgElement.src = movieData.Poster || "https://via.placeholder.com/300";
+                imgElement.alt = movieData.Title;
+                imgElement.className = "w-full h-full object-cover";
+    
+                const overlay = document.createElement("div");
+                overlay.className = "absolute inset-0 bg-black bg-opacity-80 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 p-4";
+    
+                const plotText = document.createElement("p");
+                plotText.className = "text-base text-center font-bold";
+                plotText.style.fontFamily = "'Special Elite', monospace";
+                plotText.textContent = movieData.Plot || "No plot available";
+    
+                overlay.appendChild(plotText);
+                imgContainer.appendChild(imgElement);
+                imgContainer.appendChild(overlay);
+    
+                const titleElement = document.createElement("h2");
+                titleElement.className = "text-2xl sm:text-xl font-extrabold text-white mt-1 text-center w-full break-words text-green-400";
+                titleElement.style.fontFamily = "'monospace', sans-serif";
+                titleElement.textContent = movieData.Title;
+    
+                movieDiv.appendChild(imgContainer);
+                movieDiv.appendChild(titleElement);
+                similarList.appendChild(movieDiv);
+            });
+        } catch (error) {
             console.error("Error fetching movie details:", error);
-          }
         }
-      };
-      
+    };
+    
       
 
 });

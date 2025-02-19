@@ -1,0 +1,19 @@
+<h2>Live Site Analytics</h2>
+<p>Total Visitors: <span id="total"></span></p>
+<p>Total Unique Visitors: <span id="unique"></span></p>
+<p>Today's Visitors: <span id="daily"></span></p>
+<p>Today's Unique Visitors: <span id="daily_unique"></span></p>
+<p>Current Active Visitors: <span id="active"></span></p>
+
+<script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+<script>
+const socket = io();
+
+socket.on("update_stats", (data) => {
+  document.getElementById('total').innerText = data.total_visitors;
+  document.getElementById('unique').innerText = data.total_unique_visitors;
+  document.getElementById('daily').innerText = data.daily_visitors;
+  document.getElementById('daily_unique').innerText = data.daily_unique_visitors;
+  document.getElementById('active').innerText = data.current_active_visitors;
+});
+</script>
