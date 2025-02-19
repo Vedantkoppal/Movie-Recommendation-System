@@ -2,11 +2,15 @@
 {% block content %}
 
 <!-- ✅ Centered Container -->
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-900 p-6" style="font-family: 'Special Elite', monospace;">
+<div class="flex flex-col items-center min-h-screen bg-gray-900 p-6" style="font-family: 'Special Elite', monospace;">
 
-    <h2 class="text-3xl font-semibold text-green-500 mb-6 text-center">Live Site Analytics</h2>
+    <!-- 🔹 First Section (Title or Summary) -->
+    <div class="w-full max-w-4xl text-center text-white mb-12">
+        <h1 class="text-3xl font-bold text-green-500">More to build ..</h1>
+        
+    </div>
 
-    <!-- ✅ Stats Cards Grid -->
+    <!-- 🔹 Second Section (Stats Cards) -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
 
         <!-- 🔴 Total Visitors Card -->
@@ -29,6 +33,8 @@
 
     </div>
 </div>
+
+
 
 <!-- ✅ Include Socket.IO -->
 <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
