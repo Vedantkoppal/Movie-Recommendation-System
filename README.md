@@ -16,10 +16,14 @@ This system integrates data from multiple datasets. To see detailed building of 
 
 
 ---
+## 🎥 Demo
+
+Watch the system in action! 🎬
+
+[![Watch the video](https://img.youtube.com/vi/jLauoLxS8Uw/0.jpg)](https://www.youtube.com/watch?v=jLauoLxS8Uw)
 
 
-
-
+---
 
 ## 🛠️ Tech Stack
 - **Frontend**: HTML, CSS (**TailwindCSS** for styling)
@@ -39,7 +43,7 @@ This system integrates data from multiple datasets. To see detailed building of 
 1. **User selects a favorite movie** 🎬
 2. **System retrieves similar movies** based on cosine similarity in qdrant 🔄
 3. **Recommended movies are displayed** along with their metadata 🖥️
-![Project Flow](assets/Project_Flow.png)
+![Project Flow](assets/Project_Flow_Diagram.png)
 ---
 
 ## 🎭 Collaborative Filtering
@@ -55,8 +59,10 @@ Collaborative Filtering is based on user interactions with movies. It uses user 
 
 📌 **Example Representation:**
 
-![Collaborative Filtering](assets/Collaborative_Filtering1.png)
-![Collaborative Filtering](assets/Collaborative_Filtering2.png)
+![Collaborative Filtering1](assets/Collaborative_Filtering_1.png)
+
+![Collaborative Filtering2](assets/Collaborative_Filtering2.png)
+
 ---
 
 ## 🎮 Content-Based Filtering
@@ -124,12 +130,6 @@ Matrix Factorization is used to **predict missing values** in the user-movie rat
 ![Matrix Factorization](assets/MatrixFactorization.png)
 
 
----
-## 🎥 Demo
-
-Watch the system in action! 🎬
-
-🔗 **[Live Demo](https://recommend-me.onrender.com)**
 
 ---
 
