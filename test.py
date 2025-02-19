@@ -40,3 +40,8 @@
 # from app.recommend import recommend_qdrant
 
 # recommend_qdrant([1])
+
+# from app import redis_client
+# page_cache_key = f"page_html_3"  # Replace with actual key
+# redis_client.delete(page_cache_key)
+# print(f"✅ Cache cleared for: {page_cache_key}")

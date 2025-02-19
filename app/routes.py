@@ -35,7 +35,7 @@ def index():
 @app.route('/')
 @app.route('/page/<int:page>')
 def home(page=1):
-    print(f'This is home page : {page}')
+    # print(f'This is home page : {page}')
     if page==1:
         track_visit()
     
@@ -45,10 +45,11 @@ def home(page=1):
     try:
         cached_html = redis_client.get(cache_key)
         if cached_html:
-            print("✅ Home Page HTML from Redis Cache")
+            # print("✅ Home Page HTML from Redis Cache")
             return cached_html  # Directly return cached HTML
     except Exception as e:
-        print(f"⚠️ Redis Error: {e}")
+        # print(f"⚠️ Redis Error: {e}")
+        pass
 
     
 
@@ -59,7 +60,7 @@ def home(page=1):
 
     # Fetch metadata for current page's movies
     movie_metadata = [movie_api(movie.title) for movie in paginated_movies.items]
-    print('🌐 Home page not from cache')
+    # print('🌐 Home page not from cache')
 
     # Render the HTML
     rendered_html = render_template(
@@ -70,9 +71,10 @@ def home(page=1):
 
     # Store rendered HTML in Redis (cache for 1 day)
     try:
-        redis_client.setex(cache_key, 86400, rendered_html)
+        redis_client.setex(cache_key, 432000, rendered_html)
     except Exception as e:
-        print(f"⚠️ Redis Caching Error: {e}")
+        # print(f"⚠️ Redis Caching Error: {e}")
+        pass
 
     return rendered_html  # Return rendered HTML page
 
@@ -126,10 +128,11 @@ def movie_api(title):
         try:
             cached_data = redis_client.get(title)
             if cached_data:
-                print("✅ From Redis Cache")
+                # print("✅ From Redis Cache")
                 return json.loads(cached_data)
         except redis.RedisError as e:
-            print(f"⚠️ Redis Error: {e}")
+            # print(f"⚠️ Redis Error: {e}")
+            pass
     
 
     # Query OMDB API
@@ -138,35 +141,36 @@ def movie_api(title):
         response = requests.get(app.config.get("OMDB_URL"), params=params, timeout=5)  # Timeout after 5 sec
         response.raise_for_status()  # Raise error for 4xx/5xx HTTP responses
         data = response.json()
-        print("🌐 From OMDB API")
+        # print("🌐 From OMDB API")
 
     except requests.exceptions.Timeout:
-        print("⚠️ OMDB API Timeout")
+        # print("⚠️ OMDB API Timeout")
         return {"error": "OMDB API timeout, please try again later."}
 
     except requests.exceptions.ConnectionError:
-        print("⚠️ OMDB API Connection Error")
+        # print("⚠️ OMDB API Connection Error")
         return {"error": "Unable to connect to OMDB API, please check your internet connection."}
 
     except requests.exceptions.HTTPError as http_err:
-        print(f"⚠️ HTTP Error: {http_err}")
+        # print(f"⚠️ HTTP Error: {http_err}")
         return {"error": f"OMDB API returned an error: {http_err}"}
 
     except Exception as e:
-        print(f"⚠️ Unexpected Error: {e}")
+        # print(f"⚠️ Unexpected Error: {e}")
         return {"error": "An unexpected error occurred while fetching movie data."}
 
     # Handle OMDB API movie not found case
     if data.get('Response') == 'False':
-        print("❌ Movie Not Found in OMDB")
+        # print("❌ Movie Not Found in OMDB")
         data = {"Title": title, "Plot": "Movie not found", "Poster": ""}
 
     # Store result in Redis (if available)
     if redis_client:
         try:
-            redis_client.setex(title, 86400, json.dumps(data))  # Cache for 1 day
+            redis_client.setex(title, 432000, json.dumps(data))  # Cache for 1 day
         except redis.RedisError as e:
-            print(f"⚠️ Failed to cache in Redis: {e}")
+            # print(f"⚠️ Failed to cache in Redis: {e}")
+            pass
 
     return data 
 
@@ -222,7 +226,8 @@ def track_visit():
     try:
         socketio.emit("update_stats", get_stats_data())
     except Exception as e:
-        print(f"⚠️ SocketIO Error: {e}")
+        # print(f"⚠️ SocketIO Error: {e}")
+        pass
 
 def expire_at_midnight(key):
     """Sets the expiration time for a Redis key at midnight (server time)."""
