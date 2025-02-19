@@ -24,7 +24,7 @@ try:
     redis_client = redis.StrictRedis(
         host=app.config['CACHE_REDIS_HOST'],
         port=app.config['CACHE_REDIS_PORT'],
-        username = app.config['CACHE_REDIS_USERNAME'],
+        # username = app.config['CACHE_REDIS_USERNAME'],
         password=app.config['CACHE_REDIS_PASSWORD'],
         decode_responses=True,
         socket_timeout=5,  # Timeout for Redis operations (in seconds)
