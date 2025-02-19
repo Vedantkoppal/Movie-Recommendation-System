@@ -1,8 +1,10 @@
 from flask import render_template,jsonify,request,session
 import requests
 import json
+import uuid
+import datetime
 
-from app import app,redis_client
+from app import app,redis_client,socketio
 from app.models import Movie,TopMovie
 from app.recommend import recommend_qdrant
 
@@ -34,6 +36,8 @@ def index():
 @app.route('/page/<int:page>')
 def home(page=1):
     print(f'This is home page : {page}')
+    if page==1:
+        track_visit()
     
     cache_key = f"page_html_{page}"
     
@@ -45,6 +49,9 @@ def home(page=1):
             return cached_html  # Directly return cached HTML
     except Exception as e:
         print(f"⚠️ Redis Error: {e}")
+
+    
+
 
     # If not cached, fetch from DB
     per_page = 16  
@@ -61,9 +68,9 @@ def home(page=1):
         pagination=paginated_movies
     )
 
-    # Store rendered HTML in Redis (cache for 5 minutes)
+    # Store rendered HTML in Redis (cache for 1 day)
     try:
-        redis_client.setex(cache_key, 300, rendered_html)
+        redis_client.setex(cache_key, 86400, rendered_html)
     except Exception as e:
         print(f"⚠️ Redis Caching Error: {e}")
 
@@ -183,53 +190,48 @@ def get_similar_movies():
     return jsonify(similar_movies_data)
 
 
-@app.route('/analytics')
-def analytics():
-    return render_template('analytics.html')
+
 
 # unique visitors
-@app.before_request
-def track_visits():
-    """Tracks total visitors, unique visitors, and active visitors"""
-    today = datetime.date.today().strftime("%Y-%m-%d")  # Today's date
-
-    # Increment total visitors (every request counts)
-    redis_client.incr("total_visitors")
-
-    # Track unique visitors using Flask session
-    if "user_id" not in session:
-        session["user_id"] = str(uuid.uuid4())  # Assign a unique session ID
-        redis_client.sadd("unique_visitors", session["user_id"])  # Add user to unique visitors
-        redis_client.sadd(f"unique_visitors:{today}", session["user_id"])  # Unique visitors today
-
-    # Increment daily visitor count
-    redis_client.incr(f"daily_visitors:{today}")
-
-    # Track active visitors (users active in the last 5 minutes)
-    redis_client.sadd("active_users", session["user_id"])
-    redis_client.expire("active_users", 300)  # Auto-remove inactive users after 5 min
-
-
-@app.route('/stats')
-def get_stats():
-    """Returns site analytics"""
+# @app.route("/track-visit")
+def track_visit():
     today = datetime.date.today().strftime("%Y-%m-%d")
 
-    stats = {
+    redis_client.incr("total_visitors")  # Total visits count
+
+    if "user_id" not in session:  # If a unique user, track them
+        session["user_id"] = str(uuid.uuid4())
+        redis_client.sadd("unique_visitors", session["user_id"])
+        redis_client.sadd(f"unique_visitors:{today}", session["user_id"])
+
+    redis_client.incr(f"daily_visitors:{today}")
+    redis_client.sadd("active_users", session["user_id"])
+    redis_client.expire("active_users", 300)  # Active users expire after 5 min
+
+        # Emit live update to frontend
+    try:
+        socketio.emit("update_stats", get_stats_data())
+    except Exception as e:
+        print(f"⚠️ SocketIO Error: {e}")
+
+
+def get_stats_data():
+    today = datetime.date.today().strftime("%Y-%m-%d")
+    return {
         "total_visitors": int(redis_client.get("total_visitors") or 0),
         "total_unique_visitors": redis_client.scard("unique_visitors"),
         "daily_visitors": int(redis_client.get(f"daily_visitors:{today}") or 0),
         "daily_unique_visitors": redis_client.scard(f"unique_visitors:{today}"),
-        "current_active_visitors": redis_client.scard("active_users")
+        "current_active_visitors": redis_client.scard("active_users"),
     }
-    return jsonify(stats)
 
 
-@app.route('/dashboard')
-def home():
-    """Main page"""
-    return '''
-    <h2>Welcome to the Site</h2>
-    <p><a href="/stats">View Site Analytics</a></p>
-    '''
+@socketio.on("connect")
+def on_connect():
+    socketio.emit("update_stats", get_stats_data())
+
+@app.route('/analytics')
+def analytics():
+    return render_template('analytics.html')
+
 

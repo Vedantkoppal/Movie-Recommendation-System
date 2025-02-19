@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+
 <h2>Live Site Analytics</h2>
 <p>Total Visitors: <span id="total"></span></p>
 <p>Total Unique Visitors: <span id="unique"></span></p>
@@ -5,15 +8,67 @@
 <p>Today's Unique Visitors: <span id="daily_unique"></span></p>
 <p>Current Active Visitors: <span id="active"></span></p>
 
+<!-- Chart Canvas -->
+<canvas id="visitorChart" width="400" height="200"></canvas>
+
 <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
 const socket = io();
 
+// Update Text Stats
 socket.on("update_stats", (data) => {
   document.getElementById('total').innerText = data.total_visitors;
   document.getElementById('unique').innerText = data.total_unique_visitors;
   document.getElementById('daily').innerText = data.daily_visitors;
   document.getElementById('daily_unique').innerText = data.daily_unique_visitors;
   document.getElementById('active').innerText = data.current_active_visitors;
+
+  updateChart(data);
 });
+
+// Create Chart
+const ctx = document.getElementById('visitorChart').getContext('2d');
+const visitorChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["Total", "Unique", "Today", "Today Unique", "Active"],
+        datasets: [{
+            label: 'Visitors',
+            data: [0, 0, 0, 0, 0],  // Initial Data
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Function to Update Chart
+function updateChart(data) {
+    visitorChart.data.datasets[0].data = [
+        data.total_visitors,
+        data.total_unique_visitors,
+        data.daily_visitors,
+        data.daily_unique_visitors,
+        data.current_active_visitors
+    ];
+    visitorChart.update();
+}
 </script>
+
+
+{% endblock %}

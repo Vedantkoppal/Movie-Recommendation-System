@@ -15,7 +15,7 @@ app.secret_key = "supersecretkey"
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*") 
 
 # cache = Cache(app)
 
