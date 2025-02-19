@@ -232,17 +232,29 @@ def expire_at_midnight(key):
     redis_client.expireat(key, expire_time)
 
 def get_stats_data():
-    today = datetime.date.today().strftime("%Y-%m-%d")
-    month = datetime.date.today().strftime("%Y-%m")
+    today = datetime.date.today()
+    today_str = today.strftime("%Y-%m-%d")
+    month_str = today.strftime("%Y-%m")
+
+    # Fetch past 7 days for line chart
+    dates, total_users, unique_users, active_users = [], [], [], []
+    for i in range(7):
+        date_str = (today - datetime.timedelta(days=i)).strftime("%Y-%m-%d")
+        dates.append(date_str)
+        total_users.append(int(redis_client.get(f"daily_visitors:{date_str}") or 0))
+        unique_users.append(redis_client.scard(f"unique_visitors:{date_str}"))
+        active_users.append(redis_client.scard("active_users"))
 
     return {
         "total_visitors": int(redis_client.get("total_visitors") or 0),
         "total_unique_visitors": redis_client.scard("unique_visitors"),
-        "daily_visitors": int(redis_client.get(f"daily_visitors:{today}") or 0),
-        "daily_unique_visitors": redis_client.scard(f"unique_visitors:{today}"),
         "current_active_visitors": redis_client.scard("active_users"),
-        "monthly_visitors": int(redis_client.get(f"monthly_visitors:{month}") or 0),  # 🔹 Added Monthly Count
+        "dates": dates[::-1],  # Reverse to show oldest first
+        "total_users": total_users[::-1],
+        "unique_users": unique_users[::-1],
+        "active_users": active_users[::-1],
     }
+
 
 @socketio.on("connect")
 def on_connect():
@@ -250,6 +262,6 @@ def on_connect():
 
 @app.route('/analytics')
 def analytics():
-    return render_template('analytics.html')
+    return render_template('test.html')
 
 

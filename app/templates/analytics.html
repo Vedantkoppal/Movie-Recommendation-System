@@ -1,100 +1,94 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
-    <h2 class="text-3xl font-bold text-center text-red-500 mb-6">Live Site Analytics</h2>
+<!-- ✅ Full-Width Background -->
+<div class="w-full min-h-screen bg-gray-900 text-white flex flex-col items-center p-4">
 
-    <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
-        <div class="p-4 bg-gray-800 rounded-lg shadow">
-            <p class="text-xl font-semibold">Total Visitors</p>
-            <p class="text-2xl text-red-400 font-bold" id="total">0</p>
+    <!-- ✅ Metrics Section -->
+    <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold">Total Visitors</h2>
+            <p class="text-2xl font-bold" id="total">0</p>
         </div>
-        <div class="p-4 bg-gray-800 rounded-lg shadow">
-            <p class="text-xl font-semibold">Total Unique Visitors</p>
-            <p class="text-2xl text-blue-400 font-bold" id="unique">0</p>
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold">Unique Visitors</h2>
+            <p class="text-2xl font-bold" id="unique">0</p>
         </div>
-        <div class="p-4 bg-gray-800 rounded-lg shadow">
-            <p class="text-xl font-semibold">Today's Visitors</p>
-            <p class="text-2xl text-yellow-400 font-bold" id="daily">0</p>
-        </div>
-        <div class="p-4 bg-gray-800 rounded-lg shadow">
-            <p class="text-xl font-semibold">Today's Unique Visitors</p>
-            <p class="text-2xl text-green-400 font-bold" id="daily_unique">0</p>
-        </div>
-        <div class="p-4 bg-gray-800 rounded-lg shadow md:col-span-2 lg:col-span-1">
-            <p class="text-xl font-semibold">Current Active Visitors</p>
-            <p class="text-2xl text-purple-400 font-bold" id="active">0</p>
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold">Active Users</h2>
+            <p class="text-2xl font-bold" id="active">0</p>
         </div>
     </div>
 
-    <!-- Chart Section -->
-    <div class="mt-8 p-6 bg-gray-800 rounded-lg shadow flex justify-center">
-        <div class="w-full max-w-[90vw] h-[300px]">
+    <!-- ✅ Chart Section -->
+    <div class="mt-8 w-full max-w-4xl bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl text-center text-gray-300 mb-4">User Activity (Daily & Monthly)</h3>
+        <div class="relative w-full" style="height: 300px;">
             <canvas id="visitorChart"></canvas>
         </div>
     </div>
+
 </div>
 
-<!-- Scripts -->
+<!-- ✅ Scripts -->
 <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 const socket = io();
 
-// Update Stats
+// ✅ Debugging: Log received data
 socket.on("update_stats", (data) => {
+    console.log("📡 Received data:", data);
+    
+    // ✅ Update Metrics
     document.getElementById('total').innerText = data.total_visitors;
     document.getElementById('unique').innerText = data.total_unique_visitors;
-    document.getElementById('daily').innerText = data.daily_visitors;
-    document.getElementById('daily_unique').innerText = data.daily_unique_visitors;
     document.getElementById('active').innerText = data.current_active_visitors;
 
-    updateChart(data);
+    // ✅ Update Chart
+    if (data.daily_data && data.monthly_data) {
+        updateChart(data.daily_data, data.monthly_data);
+    }
 });
 
-// Create Chart
+// ✅ Create Chart.js Instance
 const ctx = document.getElementById('visitorChart').getContext('2d');
 const visitorChart = new Chart(ctx, {
-    type: 'bar',
+    type: "line",
     data: {
-        labels: ["Total", "Unique", "Today", "Today Unique", "Active"],
-        datasets: [{
-            label: 'Visitors',
-            data: [0, 0, 0, 0, 0],  // Initial Data
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(54, 162, 235, 0.7)',
-                'rgba(255, 206, 86, 0.7)',
-                'rgba(75, 192, 192, 0.7)',
-                'rgba(153, 102, 255, 0.7)'
-            ],
-            borderWidth: 1
-        }]
+        labels: [],
+        datasets: [
+            { label: "Active Users", data: [], borderColor: "red", fill: false },
+            { label: "Unique Users", data: [], borderColor: "blue", fill: false },
+            { label: "Total Users", data: [], borderColor: "green", fill: false }
+        ]
     },
     options: {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-            y: {
-                beginAtZero: true
-            }
+            x: { title: { display: true, text: "Date" } },
+            y: { beginAtZero: true, title: { display: true, text: "Users" } }
         }
     }
 });
 
-// Function to Update Chart
-function updateChart(data) {
-    visitorChart.data.datasets[0].data = [
-        data.total_visitors,
-        data.total_unique_visitors,
-        data.daily_visitors,
-        data.daily_unique_visitors,
-        data.current_active_visitors
-    ];
+// ✅ Function to Update Chart
+function updateChart(dailyData, monthlyData) {
+    if (!dailyData || !dailyData.dates || dailyData.dates.length === 0) {
+        console.warn("⚠️ No valid data received for chart.");
+        return;
+    }
+    
+    visitorChart.data.labels = dailyData.dates;
+    visitorChart.data.datasets[0].data = dailyData.active_users;
+    visitorChart.data.datasets[1].data = dailyData.unique_users;
+    visitorChart.data.datasets[2].data = dailyData.total_users;
     visitorChart.update();
 }
 </script>
 
 {% endblock %}
+
+
