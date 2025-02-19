@@ -195,36 +195,54 @@ def get_similar_movies():
 # unique visitors
 # @app.route("/track-visit")
 def track_visit():
-    today = datetime.date.today().strftime("%Y-%m-%d")
+    today = datetime.date.today()
+    today_str = today.strftime("%Y-%m-%d")
+    month_str = today.strftime("%Y-%m")  # Format for monthly tracking
 
-    redis_client.incr("total_visitors")  # Total visits count
+    # 🔹 Total Visitors Count
+    redis_client.incr("total_visitors")
 
-    if "user_id" not in session:  # If a unique user, track them
-        session["user_id"] = str(uuid.uuid4())
+    # 🔹 Unique Visitor Check
+    if "user_id" not in session:
+        session["user_id"] = str(uuid.uuid4())  # Assign Unique ID
         redis_client.sadd("unique_visitors", session["user_id"])
-        redis_client.sadd(f"unique_visitors:{today}", session["user_id"])
+        redis_client.sadd(f"unique_visitors:{today_str}", session["user_id"])
 
-    redis_client.incr(f"daily_visitors:{today}")
+    # 🔹 Daily Tracking
+    redis_client.incr(f"daily_visitors:{today_str}")
+
+    # 🔹 Monthly Tracking (Summing daily visitors)
+    redis_client.incr(f"monthly_visitors:{month_str}")
+
+    # 🔹 Active Users (Expire at midnight)
     redis_client.sadd("active_users", session["user_id"])
-    redis_client.expire("active_users", 300)  # Active users expire after 5 min
+    expire_at_midnight("active_users")  
 
-        # Emit live update to frontend
+    # 🔹 Emit Live Update to Frontend
     try:
         socketio.emit("update_stats", get_stats_data())
     except Exception as e:
         print(f"⚠️ SocketIO Error: {e}")
 
+def expire_at_midnight(key):
+    """Sets the expiration time for a Redis key at midnight (server time)."""
+    now = datetime.datetime.now()
+    midnight = datetime.datetime.combine(now.date() + datetime.timedelta(days=1), datetime.time.min)
+    expire_time = int(midnight.timestamp())
+    redis_client.expireat(key, expire_time)
 
 def get_stats_data():
     today = datetime.date.today().strftime("%Y-%m-%d")
+    month = datetime.date.today().strftime("%Y-%m")
+
     return {
         "total_visitors": int(redis_client.get("total_visitors") or 0),
         "total_unique_visitors": redis_client.scard("unique_visitors"),
         "daily_visitors": int(redis_client.get(f"daily_visitors:{today}") or 0),
         "daily_unique_visitors": redis_client.scard(f"unique_visitors:{today}"),
         "current_active_visitors": redis_client.scard("active_users"),
+        "monthly_visitors": int(redis_client.get(f"monthly_visitors:{month}") or 0),  # 🔹 Added Monthly Count
     }
-
 
 @socketio.on("connect")
 def on_connect():
