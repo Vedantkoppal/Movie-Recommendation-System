@@ -262,6 +262,6 @@ def on_connect():
 
 @app.route('/analytics')
 def analytics():
-    return render_template('test.html')
+    return render_template('analytics.html')
 
 
