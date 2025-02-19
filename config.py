@@ -18,7 +18,7 @@ class Config (object):
     CACHE_REDIS_HOST = os.environ.get('CACHE_REDIS_HOST') or "redis-17128.crce182.ap-south-1-1.ec2.redns.redis-cloud.com"
     CACHE_REDIS_PORT = os.environ.get('CACHE_REDIS_PORT') or 17128
     CACHE_REDIS_PASSWORD = os.environ.get('CACHE_REDIS_PASSWORD') or "N7KCwAsyZfeZlcTHWtyLIBDaMl3DMTs9"
-    CACHE_REDIS_USERNAME = os.environ.get('CACHE_REDIS_PASSWORD') or "default"
+    # CACHE_REDIS_USERNAME = os.environ.get('CACHE_REDIS_PASSWORD') or "default"
     CACHE_DEFAULT_TIMEOUT = os.environ.get('CACHE_DEFAULT_TIMEOUT') or 600
 
     # Caching HomePage
