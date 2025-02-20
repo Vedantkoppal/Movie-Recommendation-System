@@ -25,7 +25,7 @@ from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String,s
 from sqlalchemy.orm import sessionmaker
 
 # Replace this with your actual PostgreSQL database URL
-DATABASE_URL = 'postgresql://movies_5kjh_user:qGkf9eSPLJDMasaEGOq9XzsAVNeQiejU@dpg-cur22ipopnds73fg6vtg-a.oregon-postgres.render.com/movies_5kjh'
+DATABASE_URL = ''
 
 try:
     # Create database engine
